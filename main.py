@@ -82,3 +82,6 @@ def extract_link(text):
 	urls = re.findall(url_pattern, text)
 	
 	return urls[0] if urls else None
+
+
+main()
