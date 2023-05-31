@@ -13,6 +13,22 @@ load_dotenv()
 client = Warpcast(mnemonic=os.environ.get("FARC_PRIVKEY"))
 mnemonic = os.environ.get("KIWI_MNEMONIC")
 
+def main():
+	for cast in client.stream_casts(skip_existing=True):
+		if cast.text.startswith("@fc-kiwi-bot2"):
+			# print(cast.text)
+			parent = client.get_cast(cast.parent_hash)
+			# print(parent)
+			link = extract_link(parent.cast.text)
+			# print(link)
+			response = send_to_kiwinews(cast.text[14:], link)
+
+			if response.status_code == 200:
+				print(response.json())
+			else:
+				print('Error: {}'.format(response.text))
+
+
 
 def send_to_kiwinews(title, href):
 	url = "https://news.kiwistand.com/api/v1/messages"
@@ -58,10 +74,7 @@ def send_to_kiwinews(title, href):
 
 	response = requests.post(url, json=request_body)
 
-	if response.status_code == 200:
-		print(response.json())
-	else:
-		print('Error: {}'.format(response.text))
+	return response
 
 
 def extract_link(text):
@@ -69,13 +82,3 @@ def extract_link(text):
 	urls = re.findall(url_pattern, text)
 	
 	return urls[0] if urls else None
-
-
-for cast in client.stream_casts(skip_existing=True):
-	if cast.text.startswith("@fc-kiwi-bot2"):
-		print(cast.text)
-		parent = client.get_cast(cast.parent_hash)
-		print(parent)
-		link = extract_link(parent.cast.text)
-		# print(link)
-		send_to_kiwinews(cast.text[14:], parent.cast.text)        
