@@ -20,6 +20,12 @@ def main():
 			parent = client.get_cast(cast.parent_hash)
 			# print(parent)
 			link = extract_link(parent.cast.text)
+			if link is None and parent.cast.embeds is not None:
+				link = parent.cast.embeds.images[0].sourceUrl
+				print(link)
+			elif link is None and parent.cast.embeds is None:
+				continue
+
 			# print(link)
 			response = send_to_kiwinews(cast.text[14:], link)
 
