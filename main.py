@@ -13,9 +13,10 @@ load_dotenv()
 client = Warpcast(mnemonic=os.environ.get("FARC_PRIVKEY"))
 mnemonic = os.environ.get("KIWI_MNEMONIC")
 
-url = "https://news.kiwistand.com/api/v1/messages"
 
 def send_to_kiwinews(title, href):
+	url = "https://news.kiwistand.com/api/v1/messages"
+	
 	request_body = {
 		"timestamp": int(time.time()),
 		"type": "amplify",
@@ -64,17 +65,17 @@ def send_to_kiwinews(title, href):
 
 
 def extract_link(text):
-    url_pattern = re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
-    urls = re.findall(url_pattern, text)
-    
-    return urls[0] if urls else None
+	url_pattern = re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
+	urls = re.findall(url_pattern, text)
+	
+	return urls[0] if urls else None
 
 
 for cast in client.stream_casts(skip_existing=True):
-    if cast.text.startswith("@fc-kiwi-bot2"):
-        print(cast.text)
-        parent = client.get_cast(cast.parent_hash)
-        print(parent)
-        link = extract_link(parent.cast.text)
-        # print(link)
-        send_to_kiwinews(cast.text[14:], parent.cast.text)        
+	if cast.text.startswith("@fc-kiwi-bot2"):
+		print(cast.text)
+		parent = client.get_cast(cast.parent_hash)
+		print(parent)
+		link = extract_link(parent.cast.text)
+		# print(link)
+		send_to_kiwinews(cast.text[14:], parent.cast.text)        
