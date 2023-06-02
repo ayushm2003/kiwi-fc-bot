@@ -15,7 +15,7 @@ mnemonic = os.environ.get("KIWI_MNEMONIC")
 
 def main():
 	for cast in client.stream_casts(skip_existing=True):
-		if cast.text.startswith("@fc-kiwi-bot2"):
+		if cast.text.startswith("@postkiwi"):
 			# print(cast.text)
 			parent = client.get_cast(cast.parent_hash)
 			# print(parent)
