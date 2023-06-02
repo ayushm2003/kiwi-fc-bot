@@ -27,7 +27,7 @@ def main():
 				continue
 
 			# print(link)
-			response = send_to_kiwinews(cast.text[14:], link)
+			response = send_to_kiwinews(cast.text[10:], link)
 
 			if response.status_code == 200:
 				print(response.json())
