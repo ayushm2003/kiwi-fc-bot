@@ -31,7 +31,8 @@ def main():
 
 			if response.status_code == 200:
 				print(response.json())
-				_ = client.post_cast(text="Added 🥝", parent=cast.hash)
+				# _ = client.post_cast(text="Added 🥝", parent=cast.hash)
+				client.like_cast(cast.hash)
 			else:
 				print('Error: {}'.format(response.text))
 
